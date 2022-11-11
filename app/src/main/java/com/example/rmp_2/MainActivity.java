@@ -1,27 +1,25 @@
 package com.example.rmp_2;
 
-
-import android.os.Bundle;
-
+import android.content.Context;
+import android.content.Intent;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
+import java.util.UUID;
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends SingleFragmentActivity {
+
+    private static final String EXTRA_EVENT_ID = "rmp_2.Event_id";
+
+    public static Intent newIntent(Context packageContext, UUID eventID) {
+        Intent intent = new Intent(packageContext, MainActivity.class);
+        intent.putExtra(EXTRA_EVENT_ID, eventID);
+        return intent;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
-        if (fragment == null){
-            fragment = new EventFragment();
-            fm.beginTransaction()
-                    .add(R.id.fragmentContainer, fragment)
-                    .commit();
-        }
+    protected Fragment createFragment() {
+        UUID eventID = (UUID) getIntent().getSerializableExtra(EXTRA_EVENT_ID);
+        return EventFragment.newInstance(eventID);
     }
+
 }

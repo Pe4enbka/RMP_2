@@ -1,12 +1,12 @@
 package com.example.rmp_2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class EventListFragment extends Fragment {
+    private static final int REQUEST_EVENT = 1;
+
     private RecyclerView mEventRecyclerView;
     private EventAdapter mAdapter;
 
@@ -27,11 +29,21 @@ public class EventListFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
     public void updateUI() {
         EventLab eventLab = EventLab.get(getActivity());
         List<Event> events = eventLab.getEvents();
-        mAdapter = new EventAdapter(events);
-        mEventRecyclerView.setAdapter(mAdapter);
+        if (mAdapter == null) {
+            mAdapter = new EventAdapter(events);
+            mEventRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     private class EventHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -46,7 +58,6 @@ public class EventListFragment extends Fragment {
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_event_title_view);
             mDateTextView = (TextView) itemView.findViewById(R.id.list_item_event_date_view);
             mSolvedCheckBox = (CheckBox) itemView.findViewById(R.id.list_item_event_checkBox);
-
         }
 
         public void bindEvent(Event event) {
@@ -57,34 +68,41 @@ public class EventListFragment extends Fragment {
         }
 
         @Override
-        public void onClick (View v){
-            Toast.makeText(getActivity(),mEvent.getmTitle()+" нажато!",Toast.LENGTH_SHORT)
-                    .show();
+        public void onClick(View v) {
+            Intent intent = EventActivity.newIntent(getActivity(), mEvent.getmId());
+            startActivityForResult(intent, REQUEST_EVENT);
         }
-
     }
 
-    private class EventAdapter extends RecyclerView.Adapter<EventHolder>{
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_EVENT) {
+            // Обработка результата
+        }
+    }
+
+    private class EventAdapter extends RecyclerView.Adapter<EventHolder> {
         private List<Event> mEvents;
-        public EventAdapter (List<Event> events){
+
+        public EventAdapter(List<Event> events) {
             mEvents = events;
         }
 
         @Override
-        public EventHolder onCreateViewHolder(ViewGroup parent,int viewType){
+        public EventHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View v = layoutInflater.inflate(R.layout.list_item_event,parent,false);
+            View v = layoutInflater.inflate(R.layout.list_item_event, parent, false);
             return new EventHolder(v);
         }
 
         @Override
-        public void onBindViewHolder(EventHolder holder, int position){
+        public void onBindViewHolder(EventHolder holder, int position) {
             Event event = mEvents.get(position);
             holder.bindEvent(event);
         }
 
         @Override
-        public int getItemCount(){
+        public int getItemCount() {
             return mEvents.size();
         }
 
