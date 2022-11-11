@@ -7,7 +7,6 @@ import java.util.UUID;
 
 
 public class MainActivity extends SingleFragmentActivity {
-
     private static final String EXTRA_EVENT_ID = "rmp_2.Event_id";
 
     public static Intent newIntent(Context packageContext, UUID eventID) {
@@ -21,5 +20,4 @@ public class MainActivity extends SingleFragmentActivity {
         UUID eventID = (UUID) getIntent().getSerializableExtra(EXTRA_EVENT_ID);
         return EventFragment.newInstance(eventID);
     }
-
 }

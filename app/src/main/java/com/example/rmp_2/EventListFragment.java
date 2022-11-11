@@ -16,7 +16,6 @@ import java.util.List;
 
 public class EventListFragment extends Fragment {
     private static final int REQUEST_EVENT = 1;
-
     private RecyclerView mEventRecyclerView;
     private EventAdapter mAdapter;
 

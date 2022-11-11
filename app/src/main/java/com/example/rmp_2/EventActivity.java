@@ -9,10 +9,8 @@ import java.util.UUID;
 
 public class EventActivity extends SingleFragmentActivity {
     public static final String EXTRA_EVENT_ID = "rmp_2.Event_id";
-    public static Intent newIntent(Context packageContext,
-                                   UUID EventId) {
-        Intent intent = new Intent(packageContext,
-                EventActivity.class);
+    public static Intent newIntent(Context packageContext, UUID EventId) {
+        Intent intent = new Intent(packageContext, EventActivity.class);
         intent.putExtra(EXTRA_EVENT_ID, EventId);
         return intent;
     }
