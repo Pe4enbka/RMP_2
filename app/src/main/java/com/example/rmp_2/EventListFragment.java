@@ -68,8 +68,8 @@ public class EventListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Intent intent = EventActivity.newIntent(getActivity(), mEvent.getmId());
-            startActivityForResult(intent, REQUEST_EVENT);
+            Intent intent = EventPagerActivity.newIntent(getActivity(), mEvent.getmId());
+            startActivity(intent);
         }
     }
 
